@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantDiseaseID - AI-Powered Plant Disease Identification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a8f29;
+            --secondary-color: #6bbd46;
+            --accent-color: #e67e22;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #777;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #5da130;
+            --secondary-color: #7dd056;
+            --accent-color: #f39c12;
+            --dark-color: #f8f9fa;
+            --light-color: #2c3e50;
+            --text-color: #f8f9fa;
+            --text-light: #bdc3c7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-color);
+            transition: var(--transition);
+        }
+
+        /* Header Styles */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--light-color);
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            color: var(--accent-color);
+            transform: rotate(30deg);
+        }
+
+        /* Language Selector in Nav */
+        .nav-language {
+            position: relative;
+        }
+
+        .nav-language-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        .nav-language-btn i {
+            font-size: 0.8rem;
+        }
+
+        .nav-language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 0.5rem;
+            display: none;
+            width: 150px;
+            z-index: 1001;
+        }
+
+        .nav-language-dropdown.show {
+            display: block;
+        }
+
+        .nav-language-option {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+            text-align: left;
+            width: 100%;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-family: inherit;
+        }
+
+        .nav-language-option:hover {
+            background-color: rgba(74, 143, 41, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(74, 143, 41, 0.1) 0%, rgba(107, 189, 70, 0.1) 100%);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 2rem;
+            border: 2px dashed var(--primary-color);
+            border-radius: var(--border-radius);
+            background-color: rgba(74, 143, 41, 0.05);
+            transition: var(--transition);
+        }
+
+        .upload-container:hover {
+            background-color: rgba(74, 143, 41, 0.1);
+        }
+
+        .upload-preview {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: var(--border-radius);
+            display: none;
+        }
+
+        .upload-options {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f1c40f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-identify {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-identify::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(30deg);
+            transition: var(--transition);
+        }
+
+        .btn-identify:hover::after {
+            left: 100%;
+        }
+
+        /* Results Section */
+        .results-section {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 2rem auto;
+            display: none;
+        }
+
+        .results-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--light-color);
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .results-table th, .results-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .results-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .results-table tr:hover {
+            background-color: rgba(74, 143, 41, 0.05);
+        }
+
+        .disease-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .more-info-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .more-info-btn:hover {
+            background-color: #f1c40f;
+        }
+
+        .more-info-content {
+            display: none;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.03);
+            border-radius: var(--border-radius);
+            margin-top: 0.5rem;
+        }
+
+        /* Language Selector */
+        .language-selector {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+        }
+
+        .language-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .language-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 0.5rem;
+            display: none;
+            width: 150px;
+        }
+
+        .language-dropdown.show {
+            display: block;
+        }
+
+        .language-option {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .language-option:hover {
+            background-color: rgba(74, 143, 41, 0.1);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            background-color: rgba(107, 189, 70, 0.05);
+        }
+
+        .features h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .how-it-works h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            padding: 4rem 2rem;
+            background-color: rgba(107, 189, 70, 0.05);
+        }
+
+        .testimonials h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .testimonial-rating {
+            color: #f1c40f;
+            margin-top: 0.5rem;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .faq h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            background-color: var(--light-color);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            background-color: var(--primary-color);
+            color: white;
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer.show {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 4rem 2rem;
+            background-color: rgba(107, 189, 70, 0.05);
+        }
+
+        .contact h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: var(--light-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .contact-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .contact-form {
+            background-color: var(--light-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 143, 41, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 3rem 2rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo i {
+            font-size: 2rem;
+        }
+
+        .footer-about p {
+            margin-bottom: 1.5rem;
+            color: #bdc3c7;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-links h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bdc3c7;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(74, 143, 41, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-language {
+                margin-top: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .upload-options {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .step {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .language-selector {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Header -->
+    <header>
+        <a href="#" class="logo">
+            <i class="fas fa-leaf"></i>
+            <span>PlantDiseaseID</span>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#identify">ID Disease</a></li>
+                <li><a href="#privacy">Privacy Policy</a></li>
+                <li class="nav-language">
+                    <button class="nav-language-btn" onclick="toggleNavLanguageDropdown()">
+                        Language <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="nav-language-dropdown" id="navLanguageDropdown">
+                        <button class="nav-language-option" onclick="changeLanguage('en')">English</button>
+                        <button class="nav-language-option" onclick="changeLanguage('ur')">Urdu</button>
+                        <button class="nav-language-option" onclick="changeLanguage('hi')">Hindi</button>
+                        <button class="nav-language-option" onclick="changeLanguage('sd')">Sindhi</button>
+                        <button class="nav-language-option" onclick="changeLanguage('bl')">Balochi</button>
+                        <button class="nav-language-option" onclick="changeLanguage('pu')">Punjabi</button>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <button class="theme-toggle" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1>Identify Plant Diseases in Seconds</h1>
+        <p>Upload a photo of your plant and our AI will instantly diagnose any diseases or pests, providing expert recommendations for treatment and prevention.</p>
+        <div class="tooltip">
+            <button class="btn btn-secondary" onclick="scrollToUpload()">
+                <i class="fas fa-camera"></i> Try It Now
+            </button>
+            <span class="tooltiptext">Click to jump to the disease identification tool</span>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section class="upload-section" id="identify">
+        <div class="upload-container">
+            <img id="imagePreview" class="upload-preview" alt="Plant image preview">
+            <div class="upload-options">
+                <button class="btn btn-primary" onclick="document.getElementById('fileUpload').click()">
+                    <i class="fas fa-upload"></i> Upload Image
+                </button>
+                <input type="file" id="fileUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                <button class="btn btn-secondary" id="takePhotoBtn">
+                    <i class="fas fa-camera"></i> Take Photo
+                </button>
+                <button class="btn btn-outline" onclick="clearImage()">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+            </div>
+            <button class="btn btn-primary btn-identify" id="identifyBtn" onclick="identifyDisease()">
+                <i class="fas fa-search"></i> Identify Disease
+            </button>
+        </div>
+    </section>
+
+    <!-- Loading Animation -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Analyzing your plant image...</p>
+    </div>
+
+    <!-- Results Section -->
+    <section class="results-section" id="results">
+        <h2>Disease Identification Results</h2>
+        <div class="results-table-container">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Disease</th>
+                        <th>Classification</th>
+                        <th>Details</th>
+                        <th>More Info</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                    <!-- Results will be populated here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <h2>Why Choose PlantDiseaseID?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Fast Diagnosis</h3>
+                <p>Get instant results with our lightning-fast AI analysis that works in seconds, not hours.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>Accurate AI Detection</h3>
+                <p>Our advanced machine learning model has been trained on thousands of plant disease images for reliable results.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3>Expert Recommendations</h3>
+                <p>Receive professional treatment and prevention advice tailored to your specific plant disease.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Upload Your Plant Photo</h3>
+                    <p>Simply take a clear photo of your plant's affected leaves or stems and upload it to our system.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>AI Analysis</h3>
+                    <p>Our advanced artificial intelligence compares your image against thousands of known plant diseases.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Get Results & Recommendations</h3>
+                    <p>Receive instant diagnosis with detailed information about the disease and expert treatment advice.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <h2>What Our Users Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">S</div>
+                    <div>
+                        <h3>Sarah K.</h3>
+                        <p>Home Gardener</p>
+                    </div>
+                </div>
+                <p>"This app saved my tomato plants! I had no idea what was causing the spots on the leaves, but PlantDiseaseID identified it as early blight and gave me perfect treatment instructions."</p>
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">R</div>
+                    <div>
+                        <h3>Raj P.</h3>
+                        <p>Farm Owner</p>
+                    </div>
+                </div>
+                <p>"As a farmer, quick disease identification is crucial. This tool helps me catch problems early, saving me thousands in potential crop losses each season."</p>
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">M</div>
+                    <div>
+                        <h3>Maria G.</h3>
+                        <p>Plant Enthusiast</p>
+                    </div>
+                </div>
+                <p>"I've tried several plant disease apps, but this one is by far the most accurate and user-friendly. The treatment recommendations are always spot on!"</p>
+                <div class="testimonial-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-items">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How accurate is PlantDiseaseID?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Our AI model has an accuracy rate of approximately 92% for common plant diseases when provided with clear images of affected leaves or stems. Accuracy may vary for rare diseases or poor quality images.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What types of plants does it support?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Currently, we support over 200 common garden plants, vegetables, fruits, and ornamental plants. We're constantly expanding our database to include more species.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Is my data and images secure?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! We take privacy seriously. Your images are only used for disease identification and are not stored permanently or shared with third parties.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I use this for commercial farming?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Absolutely! Many farmers and agricultural professionals use our tool for early disease detection in crops. We offer commercial plans with additional features.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How can I improve the identification accuracy?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>For best results: take clear, well-lit photos of affected leaves from multiple angles, include both close-ups and whole-plant views, and ensure the plant is properly identified if possible.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <h2>Contact Us</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div>
+                        <h3>Email</h3>
+                        <p>support@plantdiseaseid.com</p>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div>
+                        <h3>Phone</h3>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div>
+                        <h3>Address</h3>
+                        <p>123 Greenway Blvd, Botanica, CA 90210</p>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <i class="fas fa-leaf"></i>
+                    <span>PlantDiseaseID</span>
+                </div>
+                <p>Using advanced AI to help gardeners, farmers, and plant enthusiasts identify and treat plant diseases quickly and effectively.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#identify">Identify Disease</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Plant Care Guides</a></li>
+                    <li><a href="#">Common Diseases</a></li>
+                    <li><a href="#">Organic Treatments</a></li>
+                    <li><a href="#">Prevention Tips</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h3>Legal</h3>
+                <ul>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Cookie Policy</a></li>
+                    <li><a href="#">Data Protection</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 PlantDiseaseID. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <button class="language-btn" onclick="toggleLanguageDropdown()">
+            <i class="fas fa-language"></i>
+        </button>
+        <div class="language-dropdown" id="languageDropdown">
+            <div class="language-option" onclick="changeLanguage('en')">English</div>
+            <div class="language-option" onclick="changeLanguage('ur')">Urdu</div>
+            <div class="language-option" onclick="changeLanguage('hi')">Hindi</div>
+            <div class="language-option" onclick="changeLanguage('sd')">Sindhi</div>
+            <div class="language-option" onclick="changeLanguage('bl')">Balochi</div>
+            <div class="language-option" onclick="changeLanguage('pu')">Punjabi</div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        const currentTheme = localStorage.getItem('theme') || 'light';
+
+        // Set initial theme
+        if (currentTheme === 'dark') {
+            body.setAttribute('data-theme', 'dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+
+        // Image Upload and Preview
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function clearImage() {
+            document.getElementById('imagePreview').src = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('fileUpload').value = '';
+            document.getElementById('results').style.display = 'none';
+        }
+
+        // Take Photo Button
+        document.getElementById('takePhotoBtn').addEventListener('click', function() {
+            alert('Camera functionality would be implemented here in a production environment.');
+            // In a real app, this would access the device camera
+            // navigator.mediaDevices.getUserMedia({ video: true })
+            //     .then(function(stream) {
+            //         // Handle camera stream
+            //     })
+            //     .catch(function(err) {
+            //         console.error("Error accessing camera: ", err);
+            //     });
+        });
+
+        // Identify Disease Button
+        function identifyDisease() {
+            const preview = document.getElementById('imagePreview');
+            if (!preview.src || preview.src === '') {
+                alert('Please upload or take a photo first.');
+                return;
+            }
+
+            // Show loading animation
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('identifyBtn').disabled = true;
+
+            // Simulate API call with timeout
+            setTimeout(function() {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('identifyBtn').disabled = false;
+                showResults();
+                scrollToResults();
+            }, 2000);
+        }
+
+        // Show Results
+        function showResults() {
+            // Sample data - in a real app this would come from the API
+            const sampleResults = [
+                {
+                    name: "Powdery Mildew 🌿",
+                    classification: "Fungal",
+                    symptoms: "White powdery spots on leaves and stems",
+                    causes: "High humidity, poor air circulation",
+                    treatment: "Apply fungicide, improve air flow",
+                    prevention: "Space plants properly, water at soil level"
+                },
+                {
+                    name: "Early Blight 🍂",
+                    classification: "Fungal",
+                    symptoms: "Brown spots with concentric rings on leaves",
+                    causes: "Wet conditions, infected plant debris",
+                    treatment: "Remove affected leaves, apply copper fungicide",
+                    prevention: "Rotate crops, mulch plants, water early in day"
+                }
+            ];
+
+            const resultsBody = document.getElementById('resultsBody');
+            resultsBody.innerHTML = '';
+
+            sampleResults.forEach(result => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><div class="disease-name">${result.name}</div></td>
+                    <td>${result.classification}</td>
+                    <td>
+                        <strong>Symptoms:</strong> ${result.symptoms}<br>
+                        <strong>Causes:</strong> ${result.causes}
+                    </td>
+                    <td>
+                        <button class="more-info-btn" onclick="toggleMoreInfo(this)">Show More</button>
+                        <div class="more-info-content">
+                            <strong>Treatment:</strong> ${result.treatment}<br>
+                            <strong>Prevention:</strong> ${result.prevention}
+                        </div>
+                    </td>
+                `;
+                resultsBody.appendChild(row);
+            });
+
+            document.getElementById('results').style.display = 'block';
+        }
+
+        // Toggle More Info
+        function toggleMoreInfo(button) {
+            const content = button.nextElementSibling;
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                button.textContent = 'Show More';
+            } else {
+                content.style.display = 'block';
+                button.textContent = 'Hide';
+            }
+        }
+
+        // Toggle FAQ
+        function toggleFAQ(question) {
+            const answer = question.nextElementSibling;
+            const icon = question.querySelector('i');
+            
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                answer.classList.add('show');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+
+        // Language Selector
+        function toggleLanguageDropdown() {
+            const dropdown = document.getElementById('languageDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Nav Language Selector
+        function toggleNavLanguageDropdown() {
+            const dropdown = document.getElementById('navLanguageDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function changeLanguage(lang) {
+            // In a real app, this would change the language of all text
+            alert(`Language changed to ${lang}. This would translate all text in a production environment.`);
+            document.getElementById('languageDropdown').classList.remove('show');
+            document.getElementById('navLanguageDropdown').classList.remove('show');
+            
+            // Store selected language
+            localStorage.setItem('language', lang);
+        }
+
+        // Close language dropdown when clicking outside
+        window.addEventListener('click', function(event) {
+            if (!event.target.matches('.language-btn') && !event.target.closest('.language-dropdown') &&
+                !event.target.matches('.nav-language-btn') && !event.target.closest('.nav-language-dropdown')) {
+                const dropdowns = document.querySelectorAll('.language-dropdown, .nav-language-dropdown');
+                dropdowns.forEach(dropdown => {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+            }
+        });
+
+        // Scroll to Upload Section
+        function scrollToUpload() {
+            document.getElementById('identify').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Scroll to Results Section
+        function scrollToResults() {
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Contact Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+
+        // Initialize with first FAQ open
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstFAQ = document.querySelector('.faq-question');
+            if (firstFAQ) {
+                firstFAQ.click();
+            }
+            
+            // Set initial language if stored
+            const storedLang = localStorage.getItem('language');
+            if (storedLang) {
+                // In a real app, this would set the language
+                console.log(`Initial language set to ${storedLang}`);
+            }
+        });
+    </script>
+</body>
+</html>
