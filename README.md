@@ -70,11 +70,11 @@ Even with apps and tech, it’s good to know what to look for. These are some of
 
 ### 🕸 Powdery Mildew
 
-This one looks like someone dusted your plant with white flour. Leaves turn pale, then crispy. It spreads fast but is treatable with neem oil or baking soda mix.
+This one looks like someone dusted your plant with white flour. Leaves turn pale, then crispy. It spreads fast but is treatable with a neem oil or baking soda mix.
 
 ### 💦 Root Rot
 
-Leaves drooping for no reason? Roots might be drowning. Overwatering causes root rot — roots go brown and mushy. Stop watering, let s dry, and maybe repot.
+Leaves drooping for no reason? Roots might be drowning. Overwatering causes root rot — roots go brown and mushy. Stop watering, let's dry, and maybe repot.
 
 ### ⚫ Black Spot Disease
 
@@ -82,11 +82,11 @@ Tiny black spots on leaves? That’s this guy. Usually hits roses and outdoor pl
 
 ### 🟡 Leaf Yellowing (Chlorosis)
 
-Whole leaf turning yellow? Could be lack of nutrients or poor drainage. Check your soil and maybe add compost or fertilizer.
+Whole leaf turning yellow? Could be a lack of nutrients or poor drainage. Check your soil and maybe add compost or fertilizer.
 
 ### 🐛 Insect Damage
 
-If leaves have holes or are curling up, some bug’s probably munching on them. Check for tiny critters under the leaves. Spray with insecticidal soap or use natural pest control like neem oil.
+If leaves have holes or are curling up, some bugs’s probably munching on them. Check for tiny critters under the leaves. Spray with insecticidal soap or use natural pest control like neem oil.
 
 ---
 
@@ -132,5 +132,23 @@ Identifying plant diseases by picture is like using cheat codes for gardening. I
 
 Whether you're rocking apps or using your phone camera and Google, the key is snapping a good photo and taking action fast.
 
-Don't stress if you’re not a plant guru — you don’t need to be. With tech on your side and some basic care tips, you'll have your leafy homies thriving in no time.  
+Don't stress if you’re not a plant guru — you don’t need to be. With tech on your side and some basic care tips, your leafy homies will thrive in no time.  
 So next time your plant looks sketchy, just say “cheese,” snap a pic, and let the tech take care of the rest.
+
+## 🔎 People Also Search (with Emojis)
+
+- 🌿 **Identify plant diseases online for free**  
+- 📷 **Identify plants by picture online for free**  
+- 🆓 **Free app to diagnose plant problems**  
+- 🌱 **Free plant identifier online**  
+- 📱 **Free plant identification app**  
+- 🖼 **Plant identifier by picture**  
+- 🧪 **Plant disease identification online**  
+- 🌸 **Identify a flower by picture**  
+- 🤳 **Identify plant disease by picture**  
+- 🔍 **Plant disease identifier online**  
+- 📲 **Plant disease identifier app**  
+- 📘 **Free plant disease app**  
+- 🥇 **Best plant disease identification app**  
+- 🍏 **Plant disease app iPhone free**
+
