@@ -1,4 +1,4 @@
-# ✅ Identify Plant Disease by Picture – Plant Disease Detection Online
+#  Identify Plant Disease by Picture – Plant Disease Detection Online
 
 How can you **Identify Plant Disease by Picture** and save your green buddies before it’s too late? If you’ve ever seen your plant looking sad with yellow leaves, brown spots, or weird fuzz and have no clue what’s wrong, don’t worry. You’re not alone, bro.
 
